@@ -122,10 +122,13 @@ public void grayscottDraw() {
 }
 
 public void feedbackLoopDraw() {
+  if(cam.available()){
+    cam.read();
+    pp.setTexture(cam);
+  }
   pp.set("zoom", zoom);
   pp.set("angle", rotationAngle);
   pp.set("time", time);
-  pp.setTexture(cam);
 
   pp.draw();
 }
