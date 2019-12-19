@@ -39,6 +39,10 @@ public class PingPong {
         }
     }
 
+    public void set(String k, float[] value) {
+        shader.set(k, value);
+    }
+
     public void setTexture(PImage tex) {
         texture = tex;
         shader.set("imageTexture", texture);

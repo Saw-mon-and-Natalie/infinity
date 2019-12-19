@@ -15,6 +15,8 @@ uniform float dt;
 uniform float dA;
 uniform float dB;
 
+uniform float s11, s12, s21, s22;
+
 varying vec4 vertTexCoord;
 
 vec4 laplace(sampler2D tex, vec2 uv) {
@@ -44,17 +46,21 @@ void main() {
 
     vec4 ab = vec4(0);
     ab = texture2D(imageTexture, uv);
-
     uv = texture2D(texture, uv).rg;
 
+    // uv.r += s11 * ab.r + s12 * ab.g;
+    // uv.g += s21 * ab.r + s22 * ab.g;
     
 
     float rate = uv.r * uv.g * uv.g;
     float du = dA * lapl.r - rate + f * (1.0 - uv.r);
     float dv = dB * lapl.g + rate - (f+k) * uv.g;  
 
-    float u = clamp(uv.r + ab.r + du*dt,0.0,1.0); 
-    float v = clamp(uv.g + ab.g + dv*dt,0.0,1.0); 
+    du += s11 * ab.r + s12 * ab.g;
+    dv += s21 * ab.r + s22 * ab.g;
+
+    float u = clamp(uv.r + du*dt,0.0,1.0); 
+    float v = clamp(uv.g + dv*dt,0.0,1.0); 
 
     gl_FragColor = vec4( u, v,0.0, 1.0); 
 }

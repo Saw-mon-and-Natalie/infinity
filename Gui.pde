@@ -15,13 +15,18 @@ class Gui {
 
     public void setGUI(){
         this.addSlider("zoom", 0.00, 2.00, 1.00, 10, 10, 200, 14);
-        this.addSlider("rotationAngle", -90.00, 90.00, 10.00, 10, 30, 200, 14);  
+        this.addSlider("rotationAngle", -90.00, 90.00, 10.00, 10, 30, 200, 14); 
+         
         this.addSlider("dA", 0.00, 2.00, 1.00, 10, 50, 200, 14);
         this.addSlider("dB", 0.00, 2.00, 0.50, 10, 70, 200, 14);
         this.addSlider("f", 0.00, .20, 0.0540, 10, 90, 200, 14);
         this.addSlider("k", 0.00, .20, 0.0620, 10, 110, 200, 14);
         this.addSlider("dt", 0.0, 2.0, 1.0, 10, 1300, 200, 14);
-        this.addSlider("iterations", 1, 10, 5, 10, 150, 200, 14);
+        
+        this.addSlider("s11", -0.20, 0.20,  0.16, 220, 10, 200, 14);
+        this.addSlider("s12", -0.20, 0.20, -0.13, 220, 30, 200, 14);  
+        this.addSlider("s21", -0.20, 0.20,  0.02, 220, 50, 200, 14);
+        this.addSlider("s22", -0.20, 0.20,  0.04, 220, 70, 200, 14);
         
         cpa = cp5.addColorPicker("pickera")
                 .setPosition(10, 140)

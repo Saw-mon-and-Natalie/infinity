@@ -41,6 +41,14 @@ public class GrayScott {
         grayscott.set("dt",dt);
     }
 
+    public void set(String k, float value) {
+        grayscott.set(k, value);
+    }
+
+    public void set(String k, float[] value) {
+        grayscott.set(k, value);
+    }
+
     public void setTexture(PImage tex) {
         texture = tex;
         grayscott.set("imageTexture", texture);

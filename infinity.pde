@@ -10,6 +10,7 @@ PingPong pp;
 
 // feedback loop variables
 float zoom, rotationAngle;
+float s11, s12, s21, s22;
 float time;
 
 // grayscott variables
@@ -24,12 +25,12 @@ void setup() {
 
   guiInit();
   feedbackLoopInit();
-  // grayscottInit();
+  grayscottInit();
   camInit();
 }
 void draw() {
   time = millis() / 1000.0;
-  feedbackLoopDraw();
+  grayscottDraw();
 }
 
 void keyPressed(){
@@ -92,6 +93,11 @@ public void feedbackLoopInit() {
 }
 
 public void grayscottInit() {
+  s11 = 0.16;
+  s12 = -0.13;
+  s21 = 0.02;
+  s22 = 0.04;
+
   grayscott = loadShader("grayscott.glsl");
   render = loadShader("render.glsl");
   render.set("ca", new PVector(0, 0, 0));
@@ -112,6 +118,11 @@ public void guiInit() {
 
 public void grayscottDraw() {
   gs.set(f, k, dA,dB, dt);
+
+  gs.set("s11", s11);
+  gs.set("s12", s11);
+  gs.set("s21", s11);
+  gs.set("s22", s11);
   
   if(cam.available()){
     cam.read();
