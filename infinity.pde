@@ -7,7 +7,8 @@ MidiController midiController;
 GrayScott gs;
 PingPong pp;
 
-PGraphics out1, out2;
+// switch order of shaders
+boolean switchShaders = false;
 
 // feedback loop variables
 float zoom1, zoom2;
@@ -43,10 +44,16 @@ void setup() {
 void draw() {
   time = millis() / 1000.0;
 
-  pp.draw(tracker.getCanvas());
-  gs.draw(pp.output());
+  if(switchShaders) {
+    gs.draw(tracker.getCanvas());
+    pp.draw(gs.output());
+    image(pp.output(), 0, 0);
+  } else {
+    pp.draw(tracker.getCanvas());
+    gs.draw(pp.output());
+    image(gs.output(), 0, 0);
+  }
   
-  image(gs.output(), 0, 0);
 }
 
 void keyPressed(){
@@ -65,6 +72,9 @@ void keyPressed(){
       break;
     case('v'):
       tracker.setTilt(-1);
+      break;
+    case('s'):
+      switchShaders = !switchShaders;
       break;
     default:
       break;
@@ -91,5 +101,3 @@ public void guiInit() {
   gui = new Gui(this);
   gui.setGUI();
 }
-
-

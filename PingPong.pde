@@ -1,4 +1,4 @@
-java.lang.reflect.Field;
+import java.lang.reflect.Field;
 
 public class PingPong extends AbstractShader {
 
@@ -9,8 +9,9 @@ public class PingPong extends AbstractShader {
     private Field time;
 
     public PingPong(final PApplet parent, String shader, String sharpen) {
-        this.sharpen = loadShader(sharpen);
         super(parent, shader);
+        this.sharpen = loadShader(sharpen);
+        init();
     }
 
     protected void getFields() {
@@ -33,43 +34,51 @@ public class PingPong extends AbstractShader {
     }
 
     protected void initializeFields() {
-        zoom1.setFloat(papplet, 1.0);
-        zoom2.setFloat(papplet, 1.0);
-
-        angle1.setFloat(papplet, 90.0);
-        angle2.setFloat(papplet, 45.0);
-
-        x.setFloat(papplet, 100.0);
-        y.setFloat(papplet, 100.0);
-
-        time.setFloat(papplet, 0.0);
-
-        w0.setFloat(papplet, 1.0);
-        w1.setFloat(papplet, 1.0);
-        w2.setFloat(papplet, 1.0);
-        w3.setFloat(papplet, 1.0);
-        w4.setFloat(papplet, 1.0);
+        try {
+            zoom1.setFloat(papplet, 1.0);
+            zoom2.setFloat(papplet, 1.0);
+    
+            angle1.setFloat(papplet, 90.0);
+            angle2.setFloat(papplet, 45.0);
+    
+            x.setFloat(papplet, 100.0);
+            y.setFloat(papplet, 100.0);
+    
+            time.setFloat(papplet, 0.0);
+    
+            w0.setFloat(papplet, 1.0);
+            w1.setFloat(papplet, 1.0);
+            w2.setFloat(papplet, 1.0);
+            w3.setFloat(papplet, 1.0);
+            w4.setFloat(papplet, 1.0);
+        } catch (IllegalAccessException e) {
+            println(e);
+        }
     }
 
     protected void setUniforms() {
-        shader.set("zoom1", zoom1.getFloat(papplet));
-        shader.set("zoom2", zoom2.getFloat(papplet));
-
-        shader.set("angle1", angle1.getFloat(papplet));
-        shader.set("angle2", angle2.getFloat(papplet));
-
-        shader.set("x", x.getFloat(papplet));
-        shader.set("y", y.getFloat(papplet));
-
-        shader.set("time", time.getFloat(papplet));
-        
-        shader.set("w0", w0.getFloat(papplet));
-        shader.set("w1", w1.getFloat(papplet));
-        shader.set("w2", w2.getFloat(papplet));
-        shader.set("w3", w3.getFloat(papplet));
-        shader.set("w4", w4.getFloat(papplet));
-
-        sharpen.set("time", time.getFloat(papplet));
+        try {
+            shader.set("zoom1", zoom1.getFloat(papplet));
+            shader.set("zoom2", zoom2.getFloat(papplet));
+    
+            shader.set("angle1", angle1.getFloat(papplet));
+            shader.set("angle2", angle2.getFloat(papplet));
+    
+            shader.set("x", x.getFloat(papplet));
+            shader.set("y", y.getFloat(papplet));
+    
+            shader.set("time", time.getFloat(papplet));
+            
+            shader.set("w0", w0.getFloat(papplet));
+            shader.set("w1", w1.getFloat(papplet));
+            shader.set("w2", w2.getFloat(papplet));
+            shader.set("w3", w3.getFloat(papplet));
+            shader.set("w4", w4.getFloat(papplet));
+    
+            sharpen.set("time", time.getFloat(papplet));
+        } catch (IllegalAccessException e) {
+            println(e);
+        }
     }
 
     public void draw() {

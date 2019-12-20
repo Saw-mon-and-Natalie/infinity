@@ -1,4 +1,4 @@
-java.lang.reflect.Field;
+import java.lang.reflect.Field;
 
 public class GrayScott extends AbstractShader {
 
@@ -7,12 +7,13 @@ public class GrayScott extends AbstractShader {
     private Field s11, s12, s21, s22;
 
     public GrayScott(final PApplet parent, String shader, String fil) {
+        super(parent, shader);
         this.fil = loadShader(fil);
 
-        this.fill.set("ca", new PVector(0, 0, 0));
-        this.fill.set("cb", new PVector(1, 1, 1));
-
-        super(parent, shader);
+        this.fil.set("ca", new PVector(0, 0, 0));
+        this.fil.set("cb", new PVector(1, 1, 1));
+        
+        init();
     }
 
     protected void getFields() {
@@ -29,29 +30,39 @@ public class GrayScott extends AbstractShader {
     }
 
     protected void initializeFields() {
-        dA.setFloat(papplet, 1.0);
-        dB.setFloat(papplet, 0.5);
-        f.setFloat(papplet, 0.0545);
-        k.setFloat(papplet, 0.062);
-        dt.setFloat(papplet, 1.0);
-
-        s11.setFloat(papplet, 0.16);
-        s12.setFloat(papplet, -0.13);
-        s21.setFloat(papplet, 0.02);
-        s22.setFloat(papplet, 0.04);
+        try {
+            dA.setFloat(papplet, 1.0);
+            dB.setFloat(papplet, 0.5);
+            f.setFloat(papplet, 0.0545);
+            k.setFloat(papplet, 0.062);
+            dt.setFloat(papplet, 1.0);
+    
+            s11.setFloat(papplet, 0.16);
+            s12.setFloat(papplet, -0.13);
+            s21.setFloat(papplet, 0.02);
+            s22.setFloat(papplet, 0.04);
+        } catch (IllegalAccessException e) {
+            println(e);
+        }
+        
     }
 
     protected void setUniforms() {
-        shader.set("dA", dA.getFloat(papplet));
-        shader.set("dB", dB.getFloat(papplet));
-        shader.set("f", f.getFloat(papplet));
-        shader.set("k", k.getFloat(papplet));
-        shader.set("dt", dt.getFloat(papplet));
+        try {
+            shader.set("dA", dA.getFloat(papplet));
+            shader.set("dB", dB.getFloat(papplet));
+            shader.set("f", f.getFloat(papplet));
+            shader.set("k", k.getFloat(papplet));
+            shader.set("dt", dt.getFloat(papplet));
+    
+            shader.set("s11", s11.getFloat(papplet));
+            shader.set("s12", s12.getFloat(papplet));
+            shader.set("s22", s21.getFloat(papplet));
+            shader.set("s22", s22.getFloat(papplet));
+        } catch (IllegalAccessException e) {
+            println(e);
+        }
 
-        shader.set("s11", s11.getFloat(papplet));
-        shader.set("s12", s12.getFloat(papplet));
-        shader.set("s22", s21.getFloat(papplet));
-        shader.set("s22", s22.getFloat(papplet));
     }
 
     public void draw() {

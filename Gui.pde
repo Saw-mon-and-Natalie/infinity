@@ -64,13 +64,12 @@ class Gui {
             .setColorBackground(color(50));
     }
     
-    private void addScrollableList(String name, int x, int y, int w, int h, List<String> l) {
-      cp5.addScrollableList(name)
-     .setPosition(x, y)
-     .setSize(w, h)
-     .setBarHeight(20)
-     .setItemHeight(20)
-     .addItems(l);
+    private ScrollableList addScrollableList(String name, int x, int y, int w, int h) {
+      return cp5.addScrollableList(name)
+               .setPosition(x, y)
+               .setSize(w, h)
+               .setBarHeight(20)
+               .setItemHeight(20);
     }
 
     public void hideGUI() {

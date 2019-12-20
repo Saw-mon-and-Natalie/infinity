@@ -1,4 +1,4 @@
-java.lang.reflect.Field;
+import java.lang.reflect.Field;
 
 public abstract class AbstractShader {
 
@@ -12,8 +12,6 @@ public abstract class AbstractShader {
     public AbstractShader(final PApplet parent, String shader) {
         papplet = parent;
         this.shader = loadShader(shader);
-
-        init();
     }
 
     public void init() {
@@ -50,7 +48,13 @@ public abstract class AbstractShader {
     }
 
     protected Field getField(String name) {
-        return papplet.getClass().getDeclaredField(name);
+        try {
+          return papplet.getClass().getDeclaredField(name);
+        } 
+        catch (NoSuchFieldException e) { return null; }
+        catch (NullPointerException e) { return null; }
+        catch (SecurityException e)    { return null; }
+        
     }
 
     public PGraphics output() {
@@ -61,5 +65,5 @@ public abstract class AbstractShader {
     protected abstract void getFields();
     protected abstract void setUniforms();
     public abstract void draw();
-    public abstract void draw(PIamge tex);
+    public abstract void draw(PImage tex);
 }
