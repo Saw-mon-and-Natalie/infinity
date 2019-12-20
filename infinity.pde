@@ -2,6 +2,7 @@ import processing.video.*;
 Capture cam;
 
 Gui gui;
+MidiController midiController;
 
 PShader feedbackLoop, sharpen, grayscott, render;
 
@@ -42,6 +43,8 @@ void setup() {
   feedbackLoopInit();
   grayscottInit();
   
+  midiController = new MidiController(this, gui);
+  
   
   // camInit();
 }
@@ -77,24 +80,31 @@ void keyPressed(){
   
 }
 
-//public void controlEvent(ControlEvent c){
-//    if(c.isFrom(cpa)) {
-//    float r = c.getArrayValue(0)/255;
-//    float g = c.getArrayValue(1)/255;
-//    float b = c.getArrayValue(2)/255;
-//    render.set("ca",new PVector(r,g,b));
-    
-//    //println("event \tred:"+r+"\tgreen:"+g+"\tblue:"+b);
-//  }
-//  if(c.isFrom(cpb)) {
-//    float r = c.getArrayValue(0)/255;
-//    float g = c.getArrayValue(1)/255;
-//    float b = c.getArrayValue(2)/255;
-//    render.set("cb",new PVector(r,g,b));
+public void midiInputs(int n) {
+  println(n, gui.cp5.get(ScrollableList.class, "midiInputs").getItem(n));
+  String midiInputName = (String) gui.cp5.get(ScrollableList.class, "midiInputs").getItem(n).get("text");
+  midiController.init(midiInputName);
+}
 
-//    //println("event \tred:"+r+"\tgreen:"+g+"\tblue:"+b);
-//  }
-//}
+public void controlEvent(ControlEvent c){
+  //if(c.isFrom()){}
+  //  if(c.isFrom(cpa)) {
+  //  float r = c.getArrayValue(0)/255;
+  //  float g = c.getArrayValue(1)/255;
+  //  float b = c.getArrayValue(2)/255;
+  //  render.set("ca",new PVector(r,g,b));
+    
+  //  //println("event \tred:"+r+"\tgreen:"+g+"\tblue:"+b);
+  //}
+  //if(c.isFrom(cpb)) {
+  //  float r = c.getArrayValue(0)/255;
+  //  float g = c.getArrayValue(1)/255;
+  //  float b = c.getArrayValue(2)/255;
+  //  render.set("cb",new PVector(r,g,b));
+
+  //  //println("event \tred:"+r+"\tgreen:"+g+"\tblue:"+b);
+  //}
+}
 
 public void feedbackLoopInit() {
   zoom1 = 1.0;

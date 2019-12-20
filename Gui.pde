@@ -2,14 +2,16 @@ import controlP5.*;
 
 class Gui {
     private PApplet theParent;
-    private ControlP5 cp5;
+    private int w, h;
+    public ControlP5 cp5;
     // private ColorPicker cpa, cpb;
 
     private boolean hideGUI = false;
 
     public Gui(PApplet theParent) {
         this.theParent = theParent;
-
+        w = this.theParent.g.width;
+        h = this.theParent.g.height;
         cp5 = new ControlP5(this.theParent);
     }
 
@@ -45,6 +47,12 @@ class Gui {
         //cpb = cp5.addColorPicker("pickerb")
         //        .setPosition(10, 200)
         //        .setColorValue(color(255, 255, 255, 0));
+
+        cp5.addBang("Submit")
+            .setPosition(10, h - 24)
+            .setSize(80, 14)
+            .getCaptionLabel()
+            .align(ControlP5.CENTER, ControlP5.CENTER);    
     }
 
     private void addSlider(String name, float min, float max, float curr, int x, int y, int w, int h) {
@@ -54,6 +62,15 @@ class Gui {
             .setColorForeground(color(155))
             .setColorLabel(color(50))
             .setColorBackground(color(50));
+    }
+    
+    private void addScrollableList(String name, int x, int y, int w, int h, List<String> l) {
+      cp5.addScrollableList(name)
+     .setPosition(x, y)
+     .setSize(w, h)
+     .setBarHeight(20)
+     .setItemHeight(20)
+     .addItems(l);
     }
 
     public void hideGUI() {
