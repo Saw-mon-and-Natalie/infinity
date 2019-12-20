@@ -1,13 +1,13 @@
 public class GrayScott {
 
-    private PApplet papplet;
+    private PGraphics out;
     private PGraphics pg, pgb;
     private PImage texture;
     private PShader grayscott, fil;
     private int w, h;
 
-    public GrayScott(final PApplet theParent, PShader shader, PShader fil) {
-        papplet = theParent;
+    public GrayScott(final PGraphics out, PShader shader, PShader fil) {
+        this.out = out;
         grayscott = shader;
 
         this.fil = fil;
@@ -16,8 +16,8 @@ public class GrayScott {
     }
 
     public void init() {
-        w = papplet.g.width;
-        h = papplet.g.height;
+        w = out.width;
+        h = out.height;
 
         pg = createGraphics(w, h, P2D);
         pgb = createGraphics(w, h, P2D);
@@ -65,7 +65,9 @@ public class GrayScott {
         pgb.endDraw();
 
         // or papplet.g.image ??
-        papplet.image(pgb, 0, 0);
-        papplet.filter(fil);
+        out.beginDraw();
+        out.image(pgb, 0, 0);
+        out.filter(fil);
+        out.endDraw();
     }
 }

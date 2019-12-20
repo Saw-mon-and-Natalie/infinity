@@ -1,13 +1,13 @@
 public class PingPong {
 
-    private PApplet papplet;
+    private PGraphics out;
     private PGraphics pg, pgb;
     private PImage texture;
     private PShader shader, sharpen;
     private int w, h;
 
-    public PingPong(final PApplet theParent, PShader shader, PShader sharpen) {
-        papplet = theParent;
+    public PingPong(final PGraphics out, PShader shader, PShader sharpen) {
+        this.out = out;
         this.shader = shader;
         this.sharpen = sharpen;
 
@@ -15,8 +15,8 @@ public class PingPong {
     }
 
     public void init() {
-        w = papplet.g.width;
-        h = papplet.g.height;
+        w = out.width;
+        h = out.height;
 
         pg = createGraphics(w, h, P2D);
         pgb = createGraphics(w, h, P2D);
@@ -30,6 +30,7 @@ public class PingPong {
         pgb.beginDraw();
         pgb.background(255);
         pgb.endDraw();
+        
     }
 
     public void set(String k, float value) {
@@ -50,16 +51,20 @@ public class PingPong {
 
     public void draw() {
         pg.beginDraw();
-        pg.image(pgb, 0, 0);
         pg.shader(shader);
+        pg.image(pgb, 0, 0);
+        
         pg.endDraw();
         
         pgb.beginDraw();
-        pgb.image(pg, 0, 0);
         pgb.shader(sharpen);
+        pgb.image(pg, 0, 0);
+        
         pgb.endDraw();
 
         // or papplet.g.image ??
-        papplet.image(pgb, 0, 0);
+        out.beginDraw();
+        out.image(pgb, 0, 0);
+        out.endDraw();
     }
 }

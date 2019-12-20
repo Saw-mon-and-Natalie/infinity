@@ -11,9 +11,22 @@ uniform sampler2D imageTexture;
 uniform vec2 texOffset;
 
 uniform vec2 resolution;
-uniform float zoom;
-uniform float angle;
+
+uniform float zoom1;
+uniform float zoom2;
+
+uniform float angle1;
+uniform float angle2;
+
+uniform float x, y;
+
 uniform float time;
+
+uniform float w0;
+uniform float w1;
+uniform float w2;
+uniform float w3;
+uniform float w4;
 
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
@@ -78,16 +91,17 @@ vec4 grayScale(vec4 c) {
     return vec4(vec3((c.r + c.g + c.b) / 3.0), 1.0);
 }
 
-vec4 mixColors(vec4 c[4]) {
-    float weights[4];
+vec4 mixColors(vec4 c[5]) {
+    float weights[5];
     float sumWeights = 0;
-    weights[0] = 0.0;
-    weights[1] = 2.0;
-    weights[2] = 1.0;
-    weights[3] = 2.0;
+    weights[0] = w0;
+    weights[1] = w1;
+    weights[2] = w2;
+    weights[3] = w3;
+    weights[4] = w4;
 
     vec4 avg = vec4(0);
-    for(int i=0; i<4; i++) {
+    for(int i=0; i<5; i++) {
         avg += weights[i] * c[i];
         sumWeights += weights[i];
     }
@@ -104,24 +118,29 @@ void main() {
     float w = resolution.x;
     float h = resolution.y;
     vec2 uv = vertTexCoord.st;
-    vec3 p =  backToNormalCoord(w, h) * scale(zoom) * rotate(angle) * backToRealCoord(w, h) * vec3(uv, 1.0);
-    vec2 p1 = p.xy;
+    vec3 p1 = backToNormalCoord(w, h) * scale(zoom1) * rotate(angle1) * backToRealCoord(w, h) * vec3(uv, 1.0);
+    vec3 p2 = backToRealCoord(w, h) * vec3(uv, 1.0);
+    p2 = p2 - vec3(x,y, 0);
+    p2 = scale(zoom2) * rotate(angle2) * p2;
+    p2 = p2 + vec3(x,y, 0);
+    p2 = backToNormalCoord(w, h) * p2;
 
     // float r = rand(uv + time * 0.01);
     // r = 2.0 * r - 1.0;
 
-    vec4 col1 = texture2D(texture, uv);
-    vec4 col2 = texture2D(texture, p1);
-    vec4 col3 = leakedSignal(imageTexture, uv);
-    vec4 col4 = leakedSignal(texture, uv);
+    vec4 col0 = texture2D(texture, uv);
+    vec4 col1 = texture2D(texture, p1.xy);
+    vec4 col2 = leakedSignal(imageTexture, uv);
+    vec4 col3 = leakedSignal(texture, uv);
+    vec4 col4 = texture2D(texture, p2.xy);
 
     // col3 = grayScale(col3) ;
     // col3 = step(col3, vec4(0.5));
     // col3 = vec4(col3.rgb, 1.0);
 
-    vec4 color = mixColors(vec4[4](col1, col2, col3, col4));
+    vec4 color = mixColors(vec4[5](col0, col1, col2, col3, col4));
 
     color = clamp(color, vec4(0), vec4(1));
-    color.a = 1.0;
+    //color.a = 1.0;
     gl_FragColor = color;
 }

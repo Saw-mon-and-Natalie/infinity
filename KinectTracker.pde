@@ -7,8 +7,8 @@ public class KinectTracker {
   //int threshold = Util.metersToRawDepth(g_meters);
   public int polygonApproximationFactor = 1;
   public int minContourArea = 10000;
-  private int threshold = 1000;
-  private float angle = 16;
+  private int threshold = 965;
+  private float angle = 0;
   
   // Raw location
   private PVector loc;
@@ -36,6 +36,9 @@ public class KinectTracker {
     this.kinect = new Kinect(theParent);
     this.opencv = new OpenCV(theParent, this.kinect.width, this.kinect.height); 
     this.opencv.startBackgroundSubtraction(5, 3, 0.5);
+    
+    contours = new ArrayList<Contour>();
+    canvas = createGraphics(this.theParent.width, this.theParent.height, P2D);
 
     this.kinect.initDepth();
     this.kinect.enableMirror(true);
@@ -135,7 +138,7 @@ public class KinectTracker {
     canvas.scale(theParent.width * 1.0 / kinect.width, theParent.height * 1.0 / kinect.height);
 
     canvas.background(0);
-    canvas.fill(0,255,0,50);
+    canvas.fill(0,255,0);
     canvas.strokeWeight(1);
 
     for (Contour contour: contours) {
@@ -161,11 +164,13 @@ public class KinectTracker {
 
   public void setThreshold(int dt) {
     threshold += dt;
+    println("kinect threshold: %i", threshold); 
   }
 
   public void setTilt(float dA) {
     angle += dA;
     constrain(angle, 0, 30);
     kinect.setTilt(angle);
+    println("kinect angle: %f", angle); 
   }
 }
