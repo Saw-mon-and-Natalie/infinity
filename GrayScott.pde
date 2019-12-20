@@ -1,62 +1,86 @@
-public class GrayScott {
+java.lang.reflect.Field;
 
-    private PGraphics out;
-    private PGraphics pg, pgb;
-    private PImage texture;
-    private PShader grayscott, fil;
-    private int w, h;
+public class GrayScott extends AbstractShader {
 
-    public GrayScott(final PGraphics out, PShader shader, PShader fil) {
-        this.out = out;
-        grayscott = shader;
+    protected PShader fil;
+    private Field dA, dB, f, k, dt;
+    private Field s11, s12, s21, s22;
 
-        this.fil = fil;
+    public GrayScott(final PApplet parent, String shader, String fil) {
+        this.fil = loadShader(fil);
 
-        init();
+        this.fill.set("ca", new PVector(0, 0, 0));
+        this.fill.set("cb", new PVector(1, 1, 1));
+
+        super(parent, shader);
     }
 
-    public void init() {
-        w = out.width;
-        h = out.height;
+    protected void getFields() {
+        dA = getField("dA");
+        dB = getField("dB");
+        f = getField("f");
+        k = getField("k");
+        dt = getField("dt");
 
-        pg = createGraphics(w, h, P2D);
-        pgb = createGraphics(w, h, P2D);
-
-        pg.beginDraw();
-        pg.background(255,0,0);
-        pg.stroke(200);
-        pg.strokeWeight(15);
-        pg.endDraw();
-
-        pgb.beginDraw();
-        pgb.background(255);
-        pgb.endDraw();
+        s11 = getField("s11");
+        s12 = getField("s12");
+        s21 = getField("s21");
+        s22 = getField("s22");
     }
 
-    public void set(float f, float k, float dA, float dB, float dt) {
-        grayscott.set("f",f);
-        grayscott.set("k",k);
-        grayscott.set("dA",dA);
-        grayscott.set("dB",dB);
-        grayscott.set("dt",dt);
+    protected void initializeFields() {
+        dA.setFloat(papplet, 1.0);
+        dB.setFloat(papplet, 0.5);
+        f.setFloat(papplet, 0.0545);
+        k.setFloat(papplet, 0.062);
+        dt.setFloat(papplet, 1.0);
+
+        s11.setFloat(papplet, 0.16);
+        s12.setFloat(papplet, -0.13);
+        s21.setFloat(papplet, 0.02);
+        s22.setFloat(papplet, 0.04);
     }
 
-    public void set(String k, float value) {
-        grayscott.set(k, value);
-    }
+    protected void setUniforms() {
+        shader.set("dA", dA.getFloat(papplet));
+        shader.set("dB", dB.getFloat(papplet));
+        shader.set("f", f.getFloat(papplet));
+        shader.set("k", k.getFloat(papplet));
+        shader.set("dt", dt.getFloat(papplet));
 
-    public void set(String k, float[] value) {
-        grayscott.set(k, value);
-    }
-
-    public void setTexture(PImage tex) {
-        texture = tex;
-        grayscott.set("imageTexture", texture);
+        shader.set("s11", s11.getFloat(papplet));
+        shader.set("s12", s12.getFloat(papplet));
+        shader.set("s22", s21.getFloat(papplet));
+        shader.set("s22", s22.getFloat(papplet));
     }
 
     public void draw() {
+
+        setUniforms();
+
         pg.beginDraw();
-        pg.shader(grayscott);
+        pg.shader(shader);
+        pg.image(pgb, 0, 0);
+        pg.endDraw(); 
+
+        pgb.beginDraw();
+        pgb.image(pg, 0, 0);
+        pgb.endDraw();
+
+        // or papplet.g.image ??
+        out.beginDraw();
+        out.image(pgb, 0, 0);
+        out.filter(fil);
+        out.endDraw();
+    }
+
+    public void draw(PImage tex) {
+
+        setUniforms();
+        setTexture(tex);
+
+        pg.beginDraw();
+        pg.shader(shader);
         pg.image(pgb, 0, 0);
         pg.endDraw(); 
 
