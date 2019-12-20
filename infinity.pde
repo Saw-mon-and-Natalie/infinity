@@ -39,17 +39,19 @@ void setup() {
   tracker = new KinectTracker(this);
 
   guiInit();
-  grayscottInit();
   feedbackLoopInit();
+  grayscottInit();
+  
   
   // camInit();
 }
 void draw() {
   time = millis() / 1000.0;
-  grayscottDraw();
   feedbackLoopDraw();
+  grayscottDraw();
   
-  image(out2, 0, 0);
+  
+  image(out1, 0, 0);
 }
 
 void keyPressed(){
@@ -180,7 +182,7 @@ public void grayscottDraw() {
   //  gs.setTexture(cam);
   //}
   
-  gs.setTexture(tracker.getCanvas());
+  gs.setTexture(out2);
 
   gs.draw();
 }
@@ -191,7 +193,7 @@ public void feedbackLoopDraw() {
   //  pp.setTexture(cam);
   //}
   
-  pp.setTexture(out1);
+  pp.setTexture(tracker.getCanvas());
   pp.set("zoom1", zoom1);
   pp.set("zoom2", zoom2);
 
